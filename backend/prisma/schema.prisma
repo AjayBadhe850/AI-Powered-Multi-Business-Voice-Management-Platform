@@ -1,0 +1,290 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String              @id @default(uuid())
+  email         String              @unique
+  password      String
+  name          String
+  role          String              @default("OWNER")
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  businesses    Business[]
+  conversations VoiceConversation[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Business {
+  id              String              @id @default(uuid())
+  userId          String
+  name            String
+  type            String              // "TRAVEL", "MOBILE", "FUEL"
+  currency        String              @default("INR")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicles        Vehicle[]
+  drivers         Driver[]
+  trips           Trip[]
+  bookings        Booking[]
+  expenses        Expense[]
+  mobileProducts  MobileProduct[]
+  mobilePurchases MobilePurchase[]
+  mobileSales     MobileSale[]
+  fuelInventories FuelInventory[]
+  fuelPurchases   FuelPurchase[]
+  fuelSales       FuelSale[]
+  conversations   VoiceConversation[]
+  auditLogs       AuditLog[]
+
+  @@unique([userId, name])
+  @@map("businesses")
+}
+
+model Vehicle {
+  id              String    @id @default(uuid())
+  businessId      String
+  vehicleNumber   String    @unique
+  name            String
+  type            String    // "Bus" or "Car"
+  status          String    @default("Available") // "Available", "On Trip", "Under Maintenance"
+  driverId        String?
+  lastServiceDate DateTime?
+  nextServiceDate DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  business        Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  driver          Driver?   @relation(fields: [driverId], references: [id], onDelete: SetNull)
+  trips           Trip[]
+  bookings        Booking[]
+  expenses        Expense[]
+
+  @@map("vehicles")
+}
+
+model Driver {
+  id            String    @id @default(uuid())
+  businessId    String
+  name          String
+  phone         String
+  licenseNumber String
+  status        String    @default("Active") // "Active", "On Leave"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  business      Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  vehicles      Vehicle[]
+  trips         Trip[]
+  expenses      Expense[]
+
+  @@map("drivers")
+}
+
+model Trip {
+  id          String    @id @default(uuid())
+  businessId  String
+  vehicleId   String
+  driverId    String?
+  origin      String
+  destination String
+  startDate   DateTime
+  endDate     DateTime?
+  status      String    @default("Scheduled") // "Scheduled", "Ongoing", "Completed", "Cancelled"
+  revenue     Float     @default(0)
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  vehicle     Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  driver      Driver?   @relation(fields: [driverId], references: [id], onDelete: SetNull)
+  expenses    Expense[]
+
+  @@map("trips")
+}
+
+model Booking {
+  id             String   @id @default(uuid())
+  businessId     String
+  vehicleId      String?
+  customerName   String
+  customerPhone  String
+  pickupLocation String
+  dropLocation   String
+  bookingDate    DateTime @default(now())
+  tripDate       DateTime
+  fare           Float
+  status         String   @default("Confirmed") // "Confirmed", "Completed", "Cancelled"
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  business       Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  vehicle        Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+
+  @@map("bookings")
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  businessId  String
+  category    String   // "maintenance", "fuel", "driver", "electricity", "wages", "operating", "other"
+  amount      Float
+  description String?
+  vehicleId   String?
+  driverId    String?
+  tripId      String?
+  expenseDate DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  vehicle     Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  driver      Driver?  @relation(fields: [driverId], references: [id], onDelete: SetNull)
+  trip        Trip?    @relation(fields: [tripId], references: [id], onDelete: SetNull)
+
+  @@map("expenses")
+}
+
+model MobileProduct {
+  id            String           @id @default(uuid())
+  businessId    String
+  brand         String
+  model         String
+  purchasePrice Float
+  sellingPrice  Float
+  availableStock Int             @default(0)
+  minimumStock  Int              @default(5)
+  supplier      String?
+  purchaseDate  DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  business      Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  purchases     MobilePurchase[]
+  sales         MobileSale[]
+
+  @@unique([businessId, brand, model])
+  @@map("mobile_products")
+}
+
+model MobilePurchase {
+  id           String        @id @default(uuid())
+  businessId   String
+  productId    String
+  quantity     Int
+  unitPrice    Float
+  totalAmount  Float
+  supplier     String?
+  purchaseDate DateTime      @default(now())
+  createdAt    DateTime      @default(now())
+  business     Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  product      MobileProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("mobile_purchases")
+}
+
+model MobileSale {
+  id           String        @id @default(uuid())
+  businessId   String
+  productId    String
+  quantity     Int
+  unitPrice    Float
+  totalAmount  Float
+  costPrice    Float
+  grossProfit  Float
+  customerName String?
+  saleDate     DateTime      @default(now())
+  createdAt    DateTime      @default(now())
+  business     Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  product      MobileProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("mobile_sales")
+}
+
+model FuelInventory {
+  id                    String         @id @default(uuid())
+  businessId            String
+  fuelType              String         // Must be "Petrol" or "Diesel" only
+  currentStock          Float          @default(0) // Litres
+  openingStock          Float          @default(0)
+  purchasePricePerLitre Float
+  sellingPricePerLitre  Float
+  updatedAt             DateTime       @updatedAt
+  business              Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  purchases             FuelPurchase[]
+  sales                 FuelSale[]
+
+  @@unique([businessId, fuelType])
+  @@map("fuel_inventory")
+}
+
+model FuelPurchase {
+  id              String        @id @default(uuid())
+  businessId      String
+  fuelInventoryId String
+  fuelType        String
+  quantityLitres  Float
+  pricePerLitre   Float
+  totalAmount     Float
+  supplier        String?
+  purchaseDate    DateTime      @default(now())
+  createdAt       DateTime      @default(now())
+  business        Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  fuelInventory   FuelInventory @relation(fields: [fuelInventoryId], references: [id], onDelete: Cascade)
+
+  @@map("fuel_purchases")
+}
+
+model FuelSale {
+  id                 String        @id @default(uuid())
+  businessId         String
+  fuelInventoryId    String
+  fuelType           String
+  quantityLitres     Float
+  pricePerLitre      Float
+  totalAmount        Float
+  costPricePerLitre  Float
+  grossProfit        Float
+  saleDate           DateTime      @default(now())
+  createdAt          DateTime      @default(now())
+  business           Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  fuelInventory      FuelInventory @relation(fields: [fuelInventoryId], references: [id], onDelete: Cascade)
+
+  @@map("fuel_sales")
+}
+
+model VoiceConversation {
+  id                   String    @id @default(uuid())
+  userId               String
+  businessId           String?
+  userQuery            String
+  detectedIntent       String?
+  extractedEntities    Json?
+  clarificationNeeded  Boolean   @default(false)
+  clarificationPrompt  String?
+  responseMessage      String
+  status               String    @default("SUCCESS") // "SUCCESS", "CLARIFICATION_REQUESTED", "ERROR"
+  createdAt            DateTime  @default(now())
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business             Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+
+  @@map("voice_conversations")
+}
+
+model AuditLog {
+  id         String    @id @default(uuid())
+  userId     String
+  businessId String?
+  action     String
+  entityType String
+  entityId   String?
+  details    Json?
+  timestamp  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}

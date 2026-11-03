@@ -1,0 +1,16 @@
+{
+  "name": "vocal-labs-platform",
+  "version": "1.0.0",
+  "description": "AI-Powered Multi-Business Voice Management Platform",
+  "private": true,
+  "scripts": {
+    "backend:install": "cd backend && npm install",
+    "frontend:install": "cd frontend && npm install",
+    "seed": "cd backend && node prisma/seed.js",
+    "start": "cd backend && node src/server.js",
+    "backend:dev": "cd backend && node --watch src/server.js",
+    "frontend:dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "test": "cd backend && npm test"
+  }
+}
