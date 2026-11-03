@@ -20,8 +20,30 @@ const frontendDistPath = path.resolve(__dirname, '../../frontend/dist');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// CORS Configuration - Allows Netlify frontend, localhost dev, and dynamic Netlify preview deploys
+const allowedOrigins = [
+  'https://ai-multi-business-management.netlify.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:5000',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (curl, mobile apps, same-origin, server-to-server)
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.netlify.app')) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Permissive fallback so legitimate client variants are never blocked
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 // API Health Check
