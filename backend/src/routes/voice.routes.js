@@ -7,6 +7,7 @@ const router = Router();
 router.use(authenticateToken);
 
 router.post('/process', voiceController.processVoice);
+router.post('/tts', voiceController.streamTtsAudio);
 router.get('/history', voiceController.getVoiceHistory);
 
 export default router;

@@ -1,5 +1,5 @@
 {
-  "name": "vocal-labs-backend",
+  "name": "multi-business-voice-backend",
   "version": "1.0.0",
   "description": "Backend API for AI-Powered Multi-Business Voice Management Platform",
   "main": "src/server.js",
@@ -28,3 +28,4 @@
     "supertest": "^7.0.0"
   }
 }
+

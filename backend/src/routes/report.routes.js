@@ -10,3 +10,4 @@ router.get('/dashboard', reportController.getConsolidatedDashboard);
 router.get('/:businessId', verifyBusinessOwnership, reportController.getBusinessReport);
 
 export default router;
+

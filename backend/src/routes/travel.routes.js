@@ -16,3 +16,4 @@ router.post('/:businessId/bookings', verifyBusinessOwnership, travelController.c
 router.post('/:businessId/expenses', verifyBusinessOwnership, travelController.recordTravelExpense);
 
 export default router;
+

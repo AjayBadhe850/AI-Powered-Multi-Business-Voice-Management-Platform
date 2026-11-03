@@ -143,3 +143,4 @@ export const getFuelPurchases = async (businessId) => {
     orderBy: { purchaseDate: 'desc' },
   });
 };
+

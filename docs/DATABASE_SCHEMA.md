@@ -197,3 +197,4 @@ User (Owner)
 - `entityId`: VARCHAR(100)?
 - `details`: JSONB?
 - `timestamp`: TIMESTAMP
+

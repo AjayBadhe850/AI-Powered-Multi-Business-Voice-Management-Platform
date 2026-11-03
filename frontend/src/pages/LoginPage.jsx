@@ -45,9 +45,12 @@ export default function LoginPage() {
           </div>
         </div>
         <h2 className="mt-5 text-center text-2xl font-bold tracking-tight text-white">
-          Multi-Business Voice Management Platform
+
         </h2>
-        <p className="mt-2 text-center text-sm text-slate-400">
+        <p className="mt-1 text-center text-sm font-medium text-sky-400">
+          AI-Powered Multi-Business Voice Management Platform
+        </p>
+        <p className="mt-1 text-center text-xs text-slate-400">
           Centralized AI Control for Travel, Mobile & Fuel Stations
         </p>
       </div>
@@ -139,3 +142,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

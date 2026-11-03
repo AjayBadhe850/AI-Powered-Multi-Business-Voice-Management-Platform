@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '../config/db.js';
 import { errorResponse } from '../utils/responseFormatter.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'vocal_labs_secure_jwt_secret_key_2026_super_safe';
+const JWT_SECRET = process.env.JWT_SECRET || 'multi_business_voice_jwt_secret_key_2026_super_safe';
 
 export const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -56,3 +56,4 @@ export const verifyBusinessOwnership = async (req, res, next) => {
     return errorResponse(res, 'Error verifying business authorization', 500);
   }
 };
+

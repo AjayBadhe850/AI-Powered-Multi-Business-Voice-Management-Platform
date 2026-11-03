@@ -14,3 +14,4 @@ router.get('/:businessId/sales', verifyBusinessOwnership, fuelController.getSale
 router.get('/:businessId/purchases', verifyBusinessOwnership, fuelController.getPurchases);
 
 export default router;
+

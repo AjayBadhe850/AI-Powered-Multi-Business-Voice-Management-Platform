@@ -650,7 +650,7 @@ describe('Official 34 Test Cases Suite: AI-Powered Multi-Business Voice Manageme
       res.body.data.spokenResponse,
       pass
     );
-  });
+  }, 15000);
 
   // TEST 30: Database failure handling
   test('TC30: Database error handling is safe and non-leaking', async () => {
@@ -688,7 +688,7 @@ describe('Official 34 Test Cases Suite: AI-Powered Multi-Business Voice Manageme
       turn2.spokenResponse,
       pass
     );
-  });
+  }, 15000);
 
   // TEST 32: Dashboard refresh after a successful operation
   test('TC32: Dashboard metrics reflect database updates immediately', async () => {

@@ -21,3 +21,4 @@ export const getBusinessReport = async (req, res, next) => {
     next(err);
   }
 };
+

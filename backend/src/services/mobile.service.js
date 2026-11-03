@@ -200,3 +200,4 @@ export const getMobileSales = async (businessId) => {
     orderBy: { saleDate: 'desc' },
   });
 };
+

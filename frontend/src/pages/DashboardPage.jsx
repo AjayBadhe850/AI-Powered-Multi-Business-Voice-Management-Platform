@@ -46,8 +46,8 @@ export default function DashboardPage({ onOpenVoiceModal }) {
     const handleDataUpdate = () => {
       fetchDashboardData(timeframe);
     };
-    window.addEventListener('vocal-labs-data-updated', handleDataUpdate);
-    return () => window.removeEventListener('vocal-labs-data-updated', handleDataUpdate);
+    window.addEventListener('business-data-updated', handleDataUpdate);
+    return () => window.removeEventListener('business-data-updated', handleDataUpdate);
   }, [timeframe]);
 
   if (loading && !data) {
@@ -471,3 +471,4 @@ export default function DashboardPage({ onOpenVoiceModal }) {
     </div>
   );
 }
+

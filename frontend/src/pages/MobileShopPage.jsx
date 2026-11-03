@@ -55,8 +55,8 @@ export default function MobileShopPage() {
     fetchMobileData();
 
     const handleUpdate = () => fetchMobileData();
-    window.addEventListener('vocal-labs-data-updated', handleUpdate);
-    return () => window.removeEventListener('vocal-labs-data-updated', handleUpdate);
+    window.addEventListener('business-data-updated', handleUpdate);
+    return () => window.removeEventListener('business-data-updated', handleUpdate);
   }, [mobileBiz?.id, search]);
 
   const handleAddProduct = async (e) => {
@@ -571,3 +571,4 @@ export default function MobileShopPage() {
     </div>
   );
 }
+

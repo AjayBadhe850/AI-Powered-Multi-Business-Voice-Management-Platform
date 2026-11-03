@@ -45,3 +45,4 @@ export const createExpense = async (businessId, { category, amount, description,
     },
   });
 };
+

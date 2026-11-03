@@ -16,3 +16,4 @@ router.get('/:businessId/low-stock', verifyBusinessOwnership, mobileController.g
 router.get('/:businessId/sales', verifyBusinessOwnership, mobileController.getSales);
 
 export default router;
+

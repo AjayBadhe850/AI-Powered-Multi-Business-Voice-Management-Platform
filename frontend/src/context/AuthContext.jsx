@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [businesses, setBusinesses] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('vocal_token');
+    const token = localStorage.getItem('mbv_auth_token');
     if (token) {
       api.get('/auth/me')
         .then((res) => {
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
           }
         })
         .catch(() => {
-          localStorage.removeItem('vocal_token');
+          localStorage.removeItem('mbv_auth_token');
           setUser(null);
         })
         .finally(() => setLoading(false));
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     const res = await api.post('/auth/login', { email, password });
     if (res.data?.success) {
       const { token, user: loggedInUser } = res.data.data;
-      localStorage.setItem('vocal_token', token);
+      localStorage.setItem('mbv_auth_token', token);
       setUser(loggedInUser);
       setBusinesses(loggedInUser.businesses || []);
       return loggedInUser;
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('vocal_token');
+    localStorage.removeItem('mbv_auth_token');
     setUser(null);
     setBusinesses([]);
     window.location.href = '/login';
@@ -87,3 +87,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+

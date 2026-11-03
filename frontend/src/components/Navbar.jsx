@@ -36,10 +36,10 @@ export default function Navbar({ onOpenVoiceModal }) {
             </div>
             <div>
               <span className="font-bold text-lg tracking-tight text-slate-900 block leading-tight">
-                Vocal Labs
+                AI Voice Platform
               </span>
               <span className="text-xs text-slate-500 font-medium block">
-                Multi-Business Voice Management
+
               </span>
             </div>
           </div>
@@ -64,25 +64,23 @@ export default function Navbar({ onOpenVoiceModal }) {
             {/* Quick Voice Button */}
             <button
               onClick={onOpenVoiceModal}
-              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all shadow-sm ${
-                isListening
-                  ? 'bg-rose-500 text-white animate-voice-listening'
-                  : 'bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200'
-              }`}
-              title="Activate AI Voice Assistant"
+              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all shadow-sm ${isListening
+                ? 'bg-rose-500 text-white animate-voice-listening'
+                : 'bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200'
+                }`}
+              title="Activate AI Assistant"
             >
               <Mic className={`w-4 h-4 ${isListening ? 'animate-bounce' : ''}`} />
-              <span className="hidden sm:inline">{isListening ? 'Listening...' : 'Voice Assistant'}</span>
+              <span className="hidden sm:inline">{isListening ? 'Listening...' : 'AI Assistant'}</span>
             </button>
 
             {/* TTS Mute Toggle */}
             <button
               onClick={() => setIsTtsEnabled(!isTtsEnabled)}
-              className={`p-2 rounded-lg border transition ${
-                isTtsEnabled
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                  : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
-              }`}
+              className={`p-2 rounded-lg border transition ${isTtsEnabled
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
+                }`}
               title={isTtsEnabled ? 'Voice playback enabled' : 'Voice playback muted'}
             >
               {isTtsEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -110,3 +108,4 @@ export default function Navbar({ onOpenVoiceModal }) {
     </header>
   );
 }
+

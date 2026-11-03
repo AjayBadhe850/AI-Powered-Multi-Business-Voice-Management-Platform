@@ -15,7 +15,7 @@ const navItems = [
   { path: '/travel', label: "AJ'S TRAVEL", icon: Bus },
   { path: '/mobile-shop', label: "AJ'S MOBILE SHOP", icon: Smartphone },
   { path: '/fuel-station', label: "AJ'S FUEL STATION", icon: Fuel },
-  { path: '/assistant', label: 'Voice Assistant', icon: Mic },
+  { path: '/assistant', label: 'AI Assistant', icon: Mic },
   { path: '/reports', label: 'Financial Reports', icon: BarChart3 },
   { path: '/settings', label: 'Settings', icon: Settings },
 ];
@@ -59,3 +59,4 @@ export default function Sidebar() {
     </aside>
   );
 }
+

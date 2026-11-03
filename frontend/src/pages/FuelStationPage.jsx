@@ -61,8 +61,8 @@ export default function FuelStationPage() {
     fetchFuelData();
 
     const handleUpdate = () => fetchFuelData();
-    window.addEventListener('vocal-labs-data-updated', handleUpdate);
-    return () => window.removeEventListener('vocal-labs-data-updated', handleUpdate);
+    window.addEventListener('business-data-updated', handleUpdate);
+    return () => window.removeEventListener('business-data-updated', handleUpdate);
   }, [fuelBiz?.id]);
 
   const handleRecordSale = async (e) => {
@@ -627,3 +627,4 @@ export default function FuelStationPage() {
     </div>
   );
 }
+

@@ -17,3 +17,4 @@ export const errorResponse = (res, message = 'An error occurred', statusCode = 4
     ...(details ? { details } : {}),
   });
 };
+

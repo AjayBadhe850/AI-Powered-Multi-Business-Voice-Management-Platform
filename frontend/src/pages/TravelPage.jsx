@@ -62,8 +62,8 @@ export default function TravelPage() {
     fetchTravelData();
 
     const handleUpdate = () => fetchTravelData();
-    window.addEventListener('vocal-labs-data-updated', handleUpdate);
-    return () => window.removeEventListener('vocal-labs-data-updated', handleUpdate);
+    window.addEventListener('business-data-updated', handleUpdate);
+    return () => window.removeEventListener('business-data-updated', handleUpdate);
   }, [travelBiz?.id]);
 
   const handleCreateTrip = async (e) => {
@@ -573,3 +573,4 @@ export default function TravelPage() {
     </div>
   );
 }
+

@@ -189,3 +189,4 @@ Returns business expenses.
 
 #### `POST /expenses/:businessId`
 Records business expense.
+

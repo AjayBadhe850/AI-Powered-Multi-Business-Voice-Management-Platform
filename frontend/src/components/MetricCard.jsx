@@ -33,3 +33,4 @@ export default function MetricCard({ title, value, subtitle, icon: Icon, color =
     </div>
   );
 }
+

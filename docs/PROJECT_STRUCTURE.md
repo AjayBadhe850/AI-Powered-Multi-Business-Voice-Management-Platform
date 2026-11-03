@@ -1,7 +1,7 @@
 # Project Folder Structure Documentation
 
 ```
-vocal-labs/
+multi-business-voice-platform/
 ├── backend/                        # Node.js & Express REST API
 │   ├── prisma/
 │   │   ├── schema.prisma           # Relational schema (15 models)
@@ -87,3 +87,4 @@ vocal-labs/
 ├── README.md                       # Master product documentation
 └── package.json                    # Root script convenience orchestrator
 ```
+

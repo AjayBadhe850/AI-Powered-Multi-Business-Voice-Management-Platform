@@ -10,3 +10,4 @@ router.get('/', businessController.getAllBusinesses);
 router.get('/:businessId', businessController.getBusinessById);
 
 export default router;
+

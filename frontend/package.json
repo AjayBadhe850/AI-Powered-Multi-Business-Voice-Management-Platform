@@ -1,5 +1,5 @@
 {
-  "name": "vocal-labs-frontend",
+  "name": "multi-business-voice-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -25,3 +25,4 @@
     "vite": "^6.0.7"
   }
 }
+

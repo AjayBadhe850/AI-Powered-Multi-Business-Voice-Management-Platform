@@ -6,6 +6,7 @@ import { VoiceProvider } from './context/VoiceContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import VoiceAssistantModal from './components/VoiceAssistantModal';
+import PrintPreviewModal from './components/PrintPreviewModal';
 
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -124,6 +125,7 @@ function MainApp() {
         isOpen={isVoiceModalOpen}
         onClose={() => setIsVoiceModalOpen(false)}
       />
+      <PrintPreviewModal />
     </>
   );
 }
@@ -139,3 +141,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+

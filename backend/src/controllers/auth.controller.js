@@ -4,7 +4,7 @@ import prisma from '../config/db.js';
 import { successResponse, errorResponse } from '../utils/responseFormatter.js';
 import { logAudit } from '../utils/auditLogger.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'vocal_labs_secure_jwt_secret_key_2026_super_safe';
+const JWT_SECRET = process.env.JWT_SECRET || 'multi_business_voice_jwt_secret_key_2026_super_safe';
 
 export const login = async (req, res, next) => {
   try {
@@ -83,3 +83,4 @@ export const getMe = async (req, res, next) => {
     next(err);
   }
 };
+

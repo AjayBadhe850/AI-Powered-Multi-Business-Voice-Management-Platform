@@ -10,3 +10,4 @@ router.get('/:businessId', verifyBusinessOwnership, expenseController.getExpense
 router.post('/:businessId', verifyBusinessOwnership, expenseController.createExpense);
 
 export default router;
+

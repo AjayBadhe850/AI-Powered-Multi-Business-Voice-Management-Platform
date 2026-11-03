@@ -14,6 +14,10 @@ import {
   Fuel,
   CornerDownRight,
   Clock,
+  Square,
+  Trash2,
+  Radio,
+  Loader2,
 } from 'lucide-react';
 
 const CATEGORIZED_EXAMPLES = [
@@ -56,33 +60,53 @@ const CATEGORIZED_EXAMPLES = [
     ],
   },
   {
-    category: "Intelligent Clarification & Follow-Up",
+    category: "Voice Report Printing",
+    icon: Sparkles,
+    color: 'emerald',
+    queries: [
+      "Print this month's expenditure.",
+      "Print today's expenses.",
+      "Print last month's expenditure.",
+      "Print AJ'S TRAVEL invoices.",
+      "Print AJ'S MOBILE SHOP invoices.",
+      "Print AJ'S FUEL STATION sales report.",
+      "Print all business expenditure.",
+    ],
+  },
+  {
+    category: "Intelligent Greetings & Clarification",
     icon: HelpCircle,
     color: 'rose',
     queries: [
-      "Add 2000 rupees expense.", // Ambiguous business!
+      "Hello",
+      "What can you do?",
+      "Add 2000 rupees expense.", // Tests ambiguous business clarification!
       "Show today's mobile shop sales.",
-      "What about yesterday?", // Context retention follow-up!
+      "What about yesterday?", // Tests conversational context follow-up!
     ],
   },
 ];
 
 export default function VoiceAssistantPage() {
   const {
+    status,
     isListening,
-    transcript,
-    setTranscript,
     isProcessing,
+    isSpeaking,
+    transcript,
+    interimTranscript,
     startListening,
     stopListening,
+    stopSpeaking,
+    clearConversation,
     processQuery,
     lastResponse,
+    lastTimingMs,
     activeClarification,
     errorMessage,
     conversationHistory,
     isTtsEnabled,
     setIsTtsEnabled,
-    speak,
   } = useVoice();
 
   const [inputVal, setInputVal] = useState('');
@@ -104,35 +128,85 @@ export default function VoiceAssistantPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
-      {/* Page Title */}
+      {/* Page Title & Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">Central Voice Assistant</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">AI Assistant</h1>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 border border-sky-200">
-              Primary Interface
+              Conversational AI
             </span>
           </div>
           <p className="text-sm text-slate-500">
-            Speaks, validates, and executes verified database operations across all three businesses
+            Speaks, validates, and executes verified database operations and report printing across all three businesses
           </p>
         </div>
 
-        <button
-          onClick={() => setIsTtsEnabled(!isTtsEnabled)}
-          className={`flex items-center space-x-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition ${
-            isTtsEnabled
-              ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
-              : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200'
-          }`}
-        >
-          {isTtsEnabled ? <Volume2 className="w-4 h-4 text-emerald-600" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
-          <span>{isTtsEnabled ? 'Voice Playback On' : 'Voice Playback Muted'}</span>
-        </button>
+        <div className="flex items-center space-x-2">
+          {isSpeaking && (
+            <button
+              onClick={stopSpeaking}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold bg-rose-50 text-rose-800 border-rose-200 hover:bg-rose-100 transition shadow-sm animate-pulse"
+            >
+              <Square className="w-3.5 h-3.5 fill-rose-600 text-rose-600" />
+              <span>Stop Speaking</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => setIsTtsEnabled(!isTtsEnabled)}
+            className={`flex items-center space-x-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition ${
+              isTtsEnabled
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200'
+            }`}
+          >
+            {isTtsEnabled ? <Volume2 className="w-4 h-4 text-emerald-600" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
+            <span>{isTtsEnabled ? 'Voice Playback On' : 'Voice Playback Muted'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Interactive Assistant Console */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-md p-6 sm:p-8 flex flex-col items-center relative overflow-hidden">
+        {/* Status Badge */}
+        <div className="mb-4 flex items-center space-x-2">
+          {status === 'LISTENING' && (
+            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300 animate-pulse">
+              <Radio className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+              Listening to microphone...
+            </span>
+          )}
+          {(status === 'UNDERSTANDING' || status === 'PROCESSING') && (
+            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse">
+              <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+              AI Assistant is processing...
+            </span>
+          )}
+          {status === 'SPEAKING' && (
+            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse">
+              <Volume2 className="w-3.5 h-3.5 mr-1.5" />
+              AI Assistant is speaking...
+            </span>
+          )}
+          {status === 'IDLE' && (
+            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+              Ready for voice or text command
+            </span>
+          )}
+          {status === 'ERROR' && (
+            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">
+              <AlertCircle className="w-3.5 h-3.5 mr-1.5" />
+              AI Assistant couldn't process your request. Please try again.
+            </span>
+          )}
+          {lastTimingMs && status === 'IDLE' && (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              ⚡ {lastTimingMs}ms
+            </span>
+          )}
+        </div>
+
         {/* Ambiguous Clarification Banner */}
         {activeClarification && (
           <div className="w-full mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start space-x-3 text-amber-900 animate-fadeIn">
@@ -175,7 +249,7 @@ export default function VoiceAssistantPage() {
         )}
 
         {/* Big Central Microphone Button */}
-        <div className="relative my-4">
+        <div className="relative my-4 flex flex-col items-center">
           <button
             type="button"
             onClick={isListening ? stopListening : startListening}
@@ -184,26 +258,35 @@ export default function VoiceAssistantPage() {
                 ? 'bg-rose-500 text-white animate-voice-listening shadow-rose-500/40 scale-105'
                 : 'bg-gradient-to-tr from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white shadow-sky-600/30'
             }`}
-            title={isListening ? 'Click to stop listening' : 'Click to speak'}
+            title="Talk to AI Assistant"
           >
             <Mic className={`w-12 h-12 ${isListening ? 'animate-bounce' : ''}`} />
           </button>
+          <span className="mt-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Talk to AI Assistant
+          </span>
         </div>
 
-        {/* Status Text & Live Transcript */}
+        {/* Status Text & Live Transcript Display */}
         <div className="text-center max-w-lg mt-2 mb-6">
           <span className="text-base font-bold text-slate-800 block">
             {isListening
-              ? 'Listening to microphone... Speak naturally'
+              ? 'Listening... Speak your command'
               : isProcessing
               ? 'Interpreting voice intent & verifying with backend...'
+              : isSpeaking
+              ? 'Playing response audio...'
               : 'Tap the microphone or type below to command your businesses'}
           </span>
 
-          {transcript && (
-            <p className="mt-3 text-sm text-sky-700 font-semibold bg-sky-50 px-4 py-2 rounded-2xl border border-sky-200 inline-block shadow-sm">
-              "{transcript}"
-            </p>
+          {(transcript || interimTranscript) && (
+            <div className="mt-3 text-sm text-sky-700 font-semibold bg-sky-50 px-4 py-2 rounded-2xl border border-sky-200 inline-block shadow-sm">
+              <span>"{transcript}</span>
+              {interimTranscript && (
+                <span className="text-sky-400 italic font-normal"> {interimTranscript}...</span>
+              )}
+              <span>"</span>
+            </div>
           )}
         </div>
 
@@ -213,7 +296,7 @@ export default function VoiceAssistantPage() {
             type="text"
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
-            placeholder="Type your command (e.g. 'Is my bus available?', 'Show current petrol stock')..."
+            placeholder="Type your command (e.g. 'Hello', 'Is my bus available?', 'Show current petrol stock')..."
             className="flex-1 px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition shadow-inner"
           />
           <button
@@ -251,10 +334,10 @@ export default function VoiceAssistantPage() {
                     <button
                       key={qIdx}
                       onClick={() => handleRunExample(q)}
-                      className="w-full text-left text-xs px-3 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-medium transition flex items-center justify-between group"
+                      className="w-full text-left text-xs px-3 py-2 rounded-xl text-slate-700 hover:text-sky-700 hover:bg-sky-50/60 font-medium transition flex items-center justify-between group border border-transparent hover:border-sky-100"
                     >
                       <span className="truncate">"{q}"</span>
-                      <CornerDownRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-600 ml-2 flex-shrink-0" />
+                      <CornerDownRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-600 opacity-0 group-hover:opacity-100 transition flex-shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -271,7 +354,19 @@ export default function VoiceAssistantPage() {
             <Clock className="w-4 h-4 text-slate-500" />
             <h3 className="font-bold text-slate-900 text-sm">Voice Interaction History</h3>
           </div>
-          <span className="text-xs text-slate-400">Context retained across turns</span>
+          <div className="flex items-center space-x-4">
+            <span className="text-xs text-slate-400">Context retained across turns</span>
+            {conversationHistory.length > 0 && (
+              <button
+                onClick={clearConversation}
+                className="text-xs text-slate-400 hover:text-rose-600 flex items-center space-x-1 transition"
+                title="Clear history"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Clear</span>
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
@@ -296,7 +391,7 @@ export default function VoiceAssistantPage() {
                 {/* Assistant Response */}
                 <div className="pl-4 border-l-2 border-sky-400 py-1 space-y-1">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs font-bold text-sky-700">Voice Assistant:</span>
+                    <span className="text-xs font-bold text-sky-700">AI Assistant:</span>
                     {turn.business && (
                       <span className="text-[10px] px-2 py-0.5 rounded bg-sky-50 text-sky-800 font-semibold border border-sky-100">
                         {turn.business}

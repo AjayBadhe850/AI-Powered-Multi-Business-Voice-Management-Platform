@@ -73,8 +73,8 @@ Voice is the primary interaction method for the platform:
 
 ### Step 1: Clone and Install
 ```bash
-git clone https://github.com/vocal-labs/multi-business-voice-platform.git
-cd "c:\Vocal Labs"
+git clone https://github.com/aj-businesses/multi-business-voice-platform.git
+cd "multi-business-voice-platform"
 
 # Install backend dependencies
 cd backend
@@ -90,8 +90,8 @@ In `backend/.env`:
 ```env
 PORT=5000
 NODE_ENV=development
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/vocal_labs_db?schema=public"
-JWT_SECRET="vocal_labs_secure_jwt_secret_key_2026_super_safe"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/multi_business_db?schema=public"
+JWT_SECRET="multi_business_voice_jwt_secret_key_2026_super_safe"
 GEMINI_API_KEY="" # Optional: Add Google Gemini API key
 ```
 *(An `.env.example` file with placeholder values is provided in `backend/.env.example`)*
@@ -190,7 +190,7 @@ npm test
 TOTAL EXECUTED: 34 | PASSED: 34 | FAILED: 0
 ===============================================================
 ```
-Detailed input/output matrices are recorded in [docs/TEST_REPORT.md](file:///C:/Vocal%20Labs/docs/TEST_REPORT.md).
+Detailed input/output matrices are recorded in [docs/TEST_REPORT.md](./docs/TEST_REPORT.md).
 
 ---
 
@@ -220,3 +220,4 @@ Detailed input/output matrices are recorded in [docs/TEST_REPORT.md](file:///C:/
 1. **Browser Speech Recognition Permissions:** Speech recognition requires microphone permissions in Chromium browsers (Chrome, Edge) or Safari. In non-supporting browsers or when permissions are denied, the system seamlessly transitions to typed input without failing.
 2. **Synthetic Voices:** Text-to-speech voice quality depends on the operating system's installed speech synthesis voices.
 3. **Direct Hardware Integrations:** The platform simulates real metered fuel transactions and GPS fleet management through manual/voice inputs; it intentionally does not integrate physical fuel tank telemetry sensors or OBD-II vehicle tracking hardware without dedicated physical devices.
+

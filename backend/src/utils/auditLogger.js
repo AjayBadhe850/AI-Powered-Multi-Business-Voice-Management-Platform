@@ -18,3 +18,4 @@ export const logAudit = async ({ userId, businessId = null, action, entityType, 
     return null;
   }
 };
+

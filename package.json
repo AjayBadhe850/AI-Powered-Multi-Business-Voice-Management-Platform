@@ -1,5 +1,5 @@
 {
-  "name": "vocal-labs-platform",
+  "name": "multi-business-voice-platform",
   "version": "1.0.0",
   "description": "AI-Powered Multi-Business Voice Management Platform",
   "private": true,
@@ -14,3 +14,4 @@
     "test": "cd backend && npm test"
   }
 }
+

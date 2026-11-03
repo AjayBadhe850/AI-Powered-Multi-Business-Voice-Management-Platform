@@ -34,3 +34,4 @@ export const getBusinessById = async (req, res, next) => {
     next(err);
   }
 };
+

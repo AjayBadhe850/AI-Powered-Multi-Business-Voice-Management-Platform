@@ -106,6 +106,7 @@ model Trip {
   driver      Driver?   @relation(fields: [driverId], references: [id], onDelete: SetNull)
   expenses    Expense[]
 
+  @@index([businessId, startDate])
   @@map("trips")
 }
 
@@ -126,6 +127,7 @@ model Booking {
   business       Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   vehicle        Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
 
+  @@index([businessId, tripDate])
   @@map("bookings")
 }
 
@@ -146,6 +148,7 @@ model Expense {
   driver      Driver?  @relation(fields: [driverId], references: [id], onDelete: SetNull)
   trip        Trip?    @relation(fields: [tripId], references: [id], onDelete: SetNull)
 
+  @@index([businessId, expenseDate])
   @@map("expenses")
 }
 
@@ -201,6 +204,7 @@ model MobileSale {
   business     Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
   product      MobileProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
 
+  @@index([businessId, saleDate])
   @@map("mobile_sales")
 }
 
@@ -235,6 +239,7 @@ model FuelPurchase {
   business        Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
   fuelInventory   FuelInventory @relation(fields: [fuelInventoryId], references: [id], onDelete: Cascade)
 
+  @@index([businessId, purchaseDate])
   @@map("fuel_purchases")
 }
 
@@ -253,6 +258,7 @@ model FuelSale {
   business           Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
   fuelInventory      FuelInventory @relation(fields: [fuelInventoryId], references: [id], onDelete: Cascade)
 
+  @@index([businessId, saleDate])
   @@map("fuel_sales")
 }
 
@@ -271,6 +277,7 @@ model VoiceConversation {
   user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   business             Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
 
+  @@index([userId, createdAt])
   @@map("voice_conversations")
 }
 
@@ -286,5 +293,8 @@ model AuditLog {
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   business   Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
 
+  @@index([userId, timestamp])
+  @@index([businessId, timestamp])
   @@map("audit_logs")
 }
+

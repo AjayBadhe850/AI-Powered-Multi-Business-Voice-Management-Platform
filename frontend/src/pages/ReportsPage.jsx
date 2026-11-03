@@ -37,8 +37,8 @@ export default function ReportsPage() {
     fetchReports(timeframe);
 
     const handleUpdate = () => fetchReports(timeframe);
-    window.addEventListener('vocal-labs-data-updated', handleUpdate);
-    return () => window.removeEventListener('vocal-labs-data-updated', handleUpdate);
+    window.addEventListener('business-data-updated', handleUpdate);
+    return () => window.removeEventListener('business-data-updated', handleUpdate);
   }, [timeframe]);
 
   const handlePrint = () => {
@@ -241,3 +241,4 @@ export default function ReportsPage() {
     </div>
   );
 }
+

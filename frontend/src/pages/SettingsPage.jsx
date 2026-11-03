@@ -120,13 +120,13 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* Voice Assistant Controls & Audio Test */}
+      {/* AI Assistant Controls & Audio Test */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 space-y-4">
         <div className="flex items-center space-x-3 pb-4 border-b border-slate-100">
           <Volume2 className="w-5 h-5 text-emerald-600" />
           <div>
-            <h2 className="text-base font-bold text-slate-900">Voice Synthesis (TTS) Configuration</h2>
-            <p className="text-xs text-slate-500">Test vocal feedback and customize assistant audio settings</p>
+            <h2 className="text-base font-bold text-slate-900">AI Assistant Voice Configuration</h2>
+            <p className="text-xs text-slate-500">Test speech feedback and customize AI Assistant audio settings</p>
           </div>
         </div>
 
@@ -192,3 +192,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+
